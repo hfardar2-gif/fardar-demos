@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>داشبورد تحلیل کسب‌وکار آموزشی</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#090b10;--bg2:#11141c;--panel:#121722;--panel2:#181e2b;
+  --paper:#fbf9f4;--paper2:#fffdf8;--ink:#161a22;--muted:#6f7684;
+  --line:rgba(255,255,255,.09);--softline:#e8e1d5;
+  --gold:#e0bd78;--gold2:#b98b36;--teal:#3b8d8e;--rose:#8a5b6e;--green:#2c8a68;
+  --shadow:0 28px 80px rgba(0,0,0,.38);--radius:30px;--radius2:22px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:"Vazirmatn",Tahoma,"Segoe UI",Arial,sans-serif;
+  background:
+    radial-gradient(circle at 12% 12%, rgba(224,189,120,.18), transparent 24%),
+    radial-gradient(circle at 86% 8%, rgba(59,141,142,.15), transparent 24%),
+    linear-gradient(180deg,#0a0c12,#0d1017 38%,#0a0d13 100%);
+  color:#fff;line-height:1.85;
+}
+.wrap{max-width:1260px;margin:0 auto;padding:26px 18px 50px}
+.hero{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:34px;padding:34px;background:linear-gradient(135deg,rgba(15,18,26,.98),rgba(25,31,44,.98));box-shadow:var(--shadow)}
+.hero:before{content:"";position:absolute;width:360px;height:360px;border-radius:50%;left:-130px;top:-140px;background:radial-gradient(circle,rgba(224,189,120,.24),transparent 68%)}
+.hero:after{content:"";position:absolute;width:400px;height:400px;border-radius:50%;right:-150px;bottom:-190px;background:radial-gradient(circle,rgba(59,141,142,.18),transparent 68%)}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:22px;align-items:end;position:relative;z-index:1}
+.pill{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.11);background:rgba(255,255,255,.05);color:#f5dfb1;border-radius:999px;padding:7px 12px;font-size:12px}
+.hero h1{font-size:38px;line-height:1.3;margin:12px 0 10px;font-weight:900;letter-spacing:-.3px}
+.hero p{font-size:15px;color:#d7ddea;margin:0;max-width:780px}
+.livebox{background:linear-gradient(180deg,rgba(255,255,255,.065),rgba(255,255,255,.035));border:1px solid rgba(255,255,255,.09);border-radius:24px;padding:18px}
+.live-title{font-size:12px;color:#f1d39a;margin-bottom:8px}.live-main{font-size:18px;font-weight:700;line-height:1.9}.live-sub{font-size:12px;color:#aeb8cb;margin-top:8px}.status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#4fd39b;box-shadow:0 0 0 5px rgba(79,211,155,.09);margin-left:6px;animation:pulse 1.8s infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;position:relative;z-index:1}.btn{font:inherit;border:0;border-radius:14px;padding:11px 15px;cursor:pointer}.btn.primary{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#181712;font-weight:800}.btn.ghost{background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.1)}
+.ribbon{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-top:18px;position:relative;z-index:1}.r{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:13px}.r .k{font-size:11px;color:#bbc4d6}.r .v{font-size:19px;font-weight:800;margin-top:3px}.r .d{font-size:11px;color:#919bae}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px}.card{background:linear-gradient(180deg,var(--paper),var(--paper2));color:var(--ink);border:1px solid #ebe4d7;border-radius:var(--radius);padding:24px;box-shadow:0 16px 40px rgba(0,0,0,.18)}.card.dark{background:linear-gradient(180deg,#171c27,#111620);color:#fff;border-color:rgba(255,255,255,.08)}
+.head{display:flex;justify-content:space-between;gap:12px;align-items:end;margin-bottom:14px}.head h2{font-size:22px;margin:0 0 4px}.sub{font-size:13px;color:var(--muted)}.dark .sub{color:#aab4c8}.badge{font-size:11px;border-radius:999px;padding:5px 9px;background:#f1e7d5;color:#755616}.dark .badge{background:rgba(255,255,255,.07);color:#f2d79f}
+.cue{margin:10px 0 16px;padding:12px 14px;border-radius:16px;background:#f5efe3;border-right:4px solid var(--gold2);color:#5d4b2e;font-size:13px}.dark .cue{background:rgba(224,189,120,.09);border-right-color:var(--gold);color:#f8e8c7}
+.inputs{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{background:#fff;border:1px solid var(--softline);border-radius:18px;padding:12px 14px;position:relative;overflow:hidden}.field:before{content:"";position:absolute;top:0;right:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold),rgba(59,141,142,.7))}.field label{font-size:12px;color:#72798a}.field input{width:100%;border:0;outline:0;background:transparent;font:800 20px "Vazirmatn";color:#183343}.field small{display:block;font-size:11px;color:#9299a8}
+.health{display:grid;grid-template-columns:1fr 1fr;gap:14px}.hc{position:relative;overflow:hidden;border-radius:21px;padding:18px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.04)}.hc:before{content:"";position:absolute;left:-25px;top:-35px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.1),transparent 65%)}.hc.gold{background:linear-gradient(135deg,rgba(224,189,120,.18),rgba(224,189,120,.06))}.hc.teal{background:linear-gradient(135deg,rgba(59,141,142,.20),rgba(59,141,142,.07))}.hc.rose{background:linear-gradient(135deg,rgba(138,91,110,.22),rgba(138,91,110,.07))}.hc.green{background:linear-gradient(135deg,rgba(44,138,104,.20),rgba(44,138,104,.07))}.hc .ey{font-size:12px;color:#d6dceb}.hc .big{font-size:29px;font-weight:900;margin-top:5px}.hc .line{font-size:14px}.hc .hint{font-size:12px;color:#b7c1d4;margin-top:7px}.focus{margin-top:14px;padding:16px 18px;border-radius:18px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08)}.focus .t{font-size:12px;color:#f3d79b}.focus .x{font-size:15px;line-height:1.9;margin-top:3px}
+.analysis-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}.ai{padding:13px 14px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)}.ai .k{font-size:11px;color:#aab3c7}.ai .v{font-size:14px;margin-top:3px;color:#fff}
+.opp{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.oc{background:#fff;border:1px solid var(--softline);border-radius:22px;padding:18px;position:relative;overflow:hidden}.oc:before{content:"";position:absolute;right:0;top:0;width:6px;height:100%;background:linear-gradient(180deg,var(--gold),#ecd7ae)}.oc:nth-child(2):before{background:linear-gradient(180deg,var(--teal),#a9d6d6)}.oc:nth-child(3):before{background:linear-gradient(180deg,var(--rose),#dfbfcc)}.tag{display:inline-block;font-size:11px;border-radius:999px;padding:4px 8px;background:#f5ecdd;color:#755616}.oc:nth-child(2) .tag{background:#e7f5f4;color:#2c6e70}.oc:nth-child(3) .tag{background:#f4e8ed;color:#76495a}.oc h3{font-size:16px;margin:9px 0 6px}.money{font-size:27px;font-weight:900}.detail{font-size:13px;color:var(--muted);margin-top:6px}.micro{margin-top:10px;font-size:12px;color:#715821;background:#fbf6ec;border-radius:12px;padding:8px 10px}
+.total{margin-top:14px;padding:16px 18px;border-radius:20px;background:linear-gradient(135deg,#151a24,#242b3a);color:#fff;display:flex;justify-content:space-between;gap:18px;align-items:center}.total .label{font-size:12px;color:#c5cede}.total strong{font-size:28px}.total .small{font-size:11px;color:#98a1b5}
+.questions{display:grid;grid-template-columns:1fr 1fr;gap:12px}.q{background:#fff;border:1px solid var(--softline);border-radius:18px;padding:14px}.q b{display:inline-flex;justify-content:center;align-items:center;width:24px;height:24px;border-radius:50%;background:#f1e7d5;color:#725416;margin-left:7px;font-size:12px}.q span{font-size:14px;color:#202630}
+.plan{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.phase{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:16px}.phase .n{font-size:11px;color:#cbd3e2}.phase h3{font-size:16px;margin:4px 0 6px}.phase p{margin:0;font-size:13px;color:#bcc5d8}.note{margin-top:14px;padding:14px 16px;border:1px dashed rgba(224,189,120,.42);border-radius:16px;background:rgba(224,189,120,.08);color:#f6e6c7;font-size:13px}.footer{text-align:center;color:#aab3c6;font-size:11px;margin-top:18px}.screen-only{}
+@media(max-width:980px){.hero-grid,.grid,.ribbon,.inputs,.health,.analysis-strip,.opp,.questions,.plan{grid-template-columns:1fr}.hero h1{font-size:29px}.wrap{padding:14px}}
+@media print{body{background:#fff}.wrap{max-width:none;padding:0}.hero,.card,.total{box-shadow:none}.toolbar,.screen-only{display:none}.grid{grid-template-columns:1fr 1fr}.opp{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<section class="hero">
+  <div class="hero-grid">
+    <div>
+      <span class="pill">LIVE DIAGNOSTIC · SCENARIO ENGINE</span>
+      <h1>داشبورد تحلیل کسب‌وکار آموزشی</h1>
+      <p>یک مدل تحلیلی تعاملی برای مشاهده نرخ تبدیل، ظرفیت پنهان، ارزش بانک هنرجویان سابق و سناریوهای رشد کم‌ریسک — بر اساس داده‌های واقعی کسب‌وکار.</p>
+      <div class="toolbar screen-only">
+        <button class="btn primary" onclick="window.print()">چاپ / ذخیره PDF</button>
+        <button class="btn ghost" onclick="resetSample()">بازگردانی اعداد نمونه</button>
+      </div>
+    </div>
+    <div class="livebox">
+      <div class="live-title">LIVE BUSINESS DIAGNOSTIC</div>
+      <div class="live-main">تحلیل سناریویی کسب‌وکار بر اساس داده‌های ورودی</div>
+      <div class="live-sub"><span class="status-dot"></span> محاسبات و شاخص‌ها هم‌زمان با تغییر داده‌ها به‌روزرسانی می‌شوند.</div>
+    </div>
+  </div>
+  <div class="ribbon">
+    <div class="r"><div class="k">رویکرد</div><div class="v">Quick Wins</div><div class="d">شناسایی فرصت‌های سریع و کم‌ریسک</div></div>
+    <div class="r"><div class="k">روش</div><div class="v">Data First</div><div class="d">تصمیم‌گیری مبتنی بر داده</div></div>
+    <div class="r"><div class="k">اجرا</div><div class="v">Pilot</div><div class="d">آزمایش محدود پیش از توسعه</div></div>
+    <div class="r"><div class="k">اعتماد</div><div class="v">Aggregate Data</div><div class="d">تحلیل اولیه با داده‌های تجمیعی</div></div>
+  </div>
+</section>
+
+<div class="grid">
+<section class="card">
+  <div class="head"><div><h2>۷ عدد برای تشخیص اولیه</h2><div class="sub">برای شروع، همین چند عدد تقریبی کافی است.</div></div><div class="badge">ورودی‌های قابل ویرایش</div></div>
+  <div class="inputs">
+    <div class="field"><label>هنرجوی فعال</label><input id="active" type="number" value="120"><small>نفر</small></div>
+    <div class="field"><label>Lead ماهانه</label><input id="leads" type="number" value="180"><small>تماس / پیام / مراجعه</small></div>
+    <div class="field"><label>ثبت‌نام ماهانه</label><input id="regs" type="number" value="45"><small>نفر</small></div>
+    <div class="field"><label>میانگین شهریه</label><input id="tuition" type="number" value="12000000"><small>تومان</small></div>
+    <div class="field"><label>هنرجویان سابق قابل دسترس</label><input id="alumni" type="number" value="650"><small>نفر</small></div>
+    <div class="field"><label>ظرفیت ماهانه</label><input id="capacity" type="number" value="180"><small>نفر</small></div>
+    <div class="field"><label>ثبت‌نام تکراری</label><input id="repeat" type="number" value="18"><small>درصد</small></div>
+  </div>
+</section>
+
+<section class="card dark">
+  <div class="head"><div><h2>سلامت کسب‌وکار در یک نگاه</h2><div class="sub">چهار سؤال که سریع‌تر از ده‌ها KPI به مسئله اصلی می‌رسند.</div></div><div class="badge">تحلیل لحظه‌ای</div></div>
+  <div class="health">
+    <div class="hc gold"><div class="ey">از هر ۱۰۰ متقاضی، چند نفر ثبت‌نام می‌کنند؟</div><div class="big" id="hConvMain">۲۵ نفر</div><div class="line" id="hConvLine">۷۵ فرصت از چرخه خارج می‌شود</div><div class="hint">نرخ تبدیل فعلی: <span id="conv">۲۵٪</span></div></div>
+    <div class="hc teal"><div class="ey">چقدر از ظرفیت مجموعه هنوز بلااستفاده است؟</div><div class="big" id="hUtilMain">۳۳٪ ظرفیت خالی</div><div class="line">قبل از توسعه فضا، همین ظرفیت می‌تواند درآمدساز شود</div><div class="hint">استفاده فعلی از ظرفیت: <span id="util">۶۷٪</span></div></div>
+    <div class="hc rose"><div class="ey">بانک هنرجویان سابق چه ارزشی دارد؟</div><div class="big" id="hAlumniMain">۲۰ ثبت‌نام بالقوه</div><div class="line">فقط با فعال‌سازی ۳٪ هنرجویان سابق</div><div class="hint">سرمایه خاموش: <span id="alumniCount">۶۵۰ نفر</span></div></div>
+    <div class="hc green"><div class="ey">هر ۱٪ بهبود چه ارزشی دارد؟</div><div class="big" id="hValueMain">۲۲ میلیون تومان</div><div class="line">فقط با یک واحد درصد بهبود در نرخ تبدیل</div><div class="hint">ارزش هر ثبت‌نام: <span id="tuitionHint">۱۲ میلیون تومان</span></div></div>
+  </div>
+  <div class="focus"><div class="t">سؤال مدیریتی</div><div class="x">آیا مسئله واقعاً کمبود متقاضی است، یا بخشی از درآمد موجود در فرایند فعلی از دست می‌رود؟</div></div>
+  <div class="analysis-strip">
+    <div class="ai"><div class="k">تشخیص اولیه</div><div class="v" id="diag1">گلوگاه محتمل: تبدیل Lead</div></div>
+    <div class="ai"><div class="k">فرصت کم‌هزینه</div><div class="v" id="diag2">بانک هنرجویان سابق</div></div>
+    <div class="ai"><div class="k">اولویت بررسی</div><div class="v" id="diag3">ظرفیت و پیگیری فروش</div></div>
+  </div>
+</section>
+</div>
+
+<section class="card" style="margin-top:20px">
+  <div class="head"><div><h2>سه فرصت رشد کم‌ریسک</h2><div class="sub">سه سناریو برای اینکه قبل از هزینه‌کرد جدید، ظرفیت‌های فعلی را بسنجیم.</div></div><div class="badge">Scenario Analysis</div></div>
+  <div class="opp">
+    <div class="oc"><span class="tag">Conversion</span><h3>۵ واحد درصد بهبود نرخ تبدیل</h3><div class="money" id="opp1">۱۰۸ میلیون تومان</div><div class="detail" id="opp1d">۹ ثبت‌نام اضافه در ماه، فقط از Leadهای فعلی</div><div class="micro">تمرکز: افزایش بهره‌وری از ورودی‌های موجود پیش از افزایش هزینه جذب.</div></div>
+    <div class="oc"><span class="tag">Reactivation</span><h3>فعال‌سازی ۳٪ هنرجویان سابق</h3><div class="money" id="opp2">۲۴۰ میلیون تومان</div><div class="detail" id="opp2d">۲۰ ثبت‌نام بالقوه، بدون خرید Lead جدید</div><div class="micro">تمرکز: تبدیل بانک هنرجویان سابق به یک دارایی فعال و قابل‌اندازه‌گیری.</div></div>
+    <div class="oc"><span class="tag">Capacity</span><h3>۱۰٪ استفاده بهتر از ظرفیت</h3><div class="money" id="opp3">۲۱۶ میلیون تومان</div><div class="detail" id="opp3d">۱۸ ظرفیت قابل استفاده، قبل از توسعه فضا</div><div class="micro">تمرکز: افزایش بهره‌برداری از زیرساخت فعلی پیش از ایجاد هزینه ثابت جدید.</div></div>
+  </div>
+  <div class="total"><div><div class="label">جمع پتانسیل سناریوی نمونه</div><strong id="total">۵۶۴ میلیون تومان</strong></div><div class="small">این عدد پیش‌بینی نیست؛ فقط برای نشان دادن مقیاس فرصت در یک سناریوی نمونه است.</div></div>
+</section>
+
+<div class="grid">
+<section class="card">
+  <div class="head"><div><h2>۵ سؤال قبل از هر پیشنهاد اجرایی</h2><div class="sub">تشخیص قبل از نسخه‌پیچی</div></div></div>
+  <div class="questions">
+    <div class="q"><span><b>۱</b>اگر یک سال دیگر بگویید این مرکز واقعاً موفق شده، دقیقاً چه چیزی باید تغییر کرده باشد؟</span></div>
+    <div class="q"><span><b>۲</b>گلوگاه امروز کجاست: جذب، تبدیل، تکرار خرید، ظرفیت یا ساختار اجرایی؟</span></div>
+    <div class="q"><span><b>۳</b>کدام دوره بیشترین تقاضا و کدام بیشترین حاشیه سود را دارد؟</span></div>
+    <div class="q"><span><b>۴</b>چند هنرجوی سابق داریم که واقعاً می‌توان دوباره فعال کرد؟</span></div>
+    <div class="q"><span><b>۵</b>اگر فقط یک KPI بهتر شود، برای شما معنی موفقیت چیست؟</span></div>
+  </div>
+</section>
+
+<section class="card dark">
+  <div class="head"><div><h2>پیشنهاد مسیر همکاری</h2><div class="sub">مرحله‌ای، قابل‌اندازه‌گیری و کم‌ریسک</div></div></div>
+  <div class="plan">
+    <div class="phase"><div class="n">مرحله ۱</div><h3>Diagnostic</h3><p>جمع‌آوری داده‌های تجمیعی و شناسایی گلوگاه اصلی.</p></div>
+    <div class="phase"><div class="n">مرحله ۲</div><h3>Pilot</h3><p>یک آزمایش کوچک روی یک KPI مشخص و قابل‌اندازه‌گیری.</p></div>
+    <div class="phase"><div class="n">مرحله ۳</div><h3>Scale</h3><p>در صورت نتیجه، توسعه سیستم و تعریف همکاری بلندمدت.</p></div>
+  </div>
+  <div class="note"><b>منطق اجرا:</b> تصمیم برای توسعه همکاری فقط پس از مشاهده نتیجه قابل‌اندازه‌گیری در Pilot انجام می‌شود.</div>
+</section>
+</div>
+
+<div class="footer">Business Diagnostic Dashboard · داده‌های فعلی نمونه‌اند و تحلیل با داده‌های واقعی به‌صورت لحظه‌ای به‌روزرسانی می‌شود.</div>
+</div>
+<script>
+const ids=['active','leads','regs','tuition','alumni','capacity','repeat'];
+const sample={active:120,leads:180,regs:45,tuition:12000000,alumni:650,capacity:180,repeat:18};
+const n=id=>Math.max(0,Number(document.getElementById(id).value)||0);
+const fa=x=>Math.round(x).toLocaleString('fa-IR');
+function money(x){if(x>=1e9)return (x/1e9).toLocaleString('fa-IR',{maximumFractionDigits:1})+' میلیارد تومان';if(x>=1e6)return (x/1e6).toLocaleString('fa-IR',{maximumFractionDigits:0})+' میلیون تومان';return Math.round(x).toLocaleString('fa-IR')+' تومان';}
+function pct(x,d=1){return x.toLocaleString('fa-IR',{maximumFractionDigits:d})+'٪'}
+function calc(){
+ const active=n('active'),leads=n('leads'),regs=n('regs'),t=n('tuition'),alumni=n('alumni'),cap=Math.max(1,n('capacity'));
+ const conv=leads?regs/leads:0, conv100=conv*100, lost=Math.max(0,100-conv100), util100=active/cap*100, unused=Math.max(0,100-util100), react=Math.round(alumni*.03), onePctValue=leads*.01*t;
+ document.getElementById('conv').textContent=pct(conv100,1);
+ document.getElementById('util').textContent=pct(util100,1);
+ document.getElementById('alumniCount').textContent=fa(alumni)+' نفر';
+ document.getElementById('tuitionHint').textContent=money(t);
+ document.getElementById('hConvMain').textContent=fa(Math.round(conv100))+' نفر';
+ document.getElementById('hConvLine').textContent=fa(Math.round(lost))+' فرصت از چرخه خارج می‌شود';
+ document.getElementById('hUtilMain').textContent=pct(unused,0)+' ظرفیت خالی';
+ document.getElementById('hAlumniMain').textContent=fa(react)+' ثبت‌نام بالقوه';
+ document.getElementById('hValueMain').textContent=money(onePctValue);
+ const a1=Math.round(leads*.05), a2=react, a3=Math.round(cap*.10); const m1=a1*t,m2=a2*t,m3=a3*t;
+ document.getElementById('opp1').textContent=money(m1);document.getElementById('opp2').textContent=money(m2);document.getElementById('opp3').textContent=money(m3);
+ document.getElementById('opp1d').textContent=fa(a1)+' ثبت‌نام اضافه در ماه، فقط از Leadهای فعلی';
+ document.getElementById('opp2d').textContent=fa(a2)+' ثبت‌نام بالقوه، بدون خرید Lead جدید';
+ document.getElementById('opp3d').textContent=fa(a3)+' ظرفیت قابل استفاده، قبل از توسعه فضا';
+ document.getElementById('total').textContent=money(m1+m2+m3);
+ document.getElementById('diag1').textContent = conv100 < 30 ? 'گلوگاه محتمل: تبدیل Lead' : 'تبدیل فعلی نسبتاً مناسب است';
+ document.getElementById('diag2').textContent = alumni >= 300 ? 'بانک هنرجویان سابق' : 'نیاز به بررسی کانال‌های جذب';
+ document.getElementById('diag3').textContent = unused > 20 ? 'ظرفیت و پیگیری فروش' : 'تکرار خرید و ارزش هر هنرجو';
+}
+function resetSample(){ids.forEach(id=>document.getElementById(id).value=sample[id]);calc()}
+ids.forEach(id=>document.getElementById(id).addEventListener('input',calc));calc();
+</script>
+</body>
+</html>

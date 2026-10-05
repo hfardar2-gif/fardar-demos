@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b4f6c" />
+  <meta name="description" content="سامانه آفلاین بررسی بستری مجدد زیر ۴۸ ساعت بیمارستان شهید چمران اصفهان" />
+  <title>آمار بستری مجدد زیر ۴۸ ساعت</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">۴۸</div>
+        <div><strong>بستری مجدد</strong><span>بیمارستان شهید چمران</span></div>
+      </div>
+      <nav aria-label="منوی اصلی">
+        <button class="nav-item active" data-view="dashboard"><span>▦</span>داشبورد</button>
+        <button class="nav-item" data-view="import"><span>⇧</span>ورود فایل اکسل</button>
+        <button class="nav-item" data-view="cases"><span>☷</span>بررسی پرونده‌ها <b id="navPending">۰</b></button>
+        <button class="nav-item" data-view="reports"><span>▥</span>گزارش بررسی پرونده‌ها</button>
+        <button class="nav-item" data-view="analytics"><span>◫</span>گزارش تحلیلی</button>
+        <button class="nav-item" data-view="base"><span>☷</span>اطلاعات پایه</button>
+        <button class="nav-item" data-view="settings"><span>⚙</span>تنظیمات</button>
+      </nav>
+      <div class="privacy-note"><div><span class="status-dot"></span>اطلاعات فقط روی همین دستگاه ذخیره می‌شود.</div><small>طراحی و ساخت Hamid Reza Fardar</small></div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <button class="icon-btn mobile-menu" id="menuBtn" aria-label="باز کردن منو">☰</button>
+        <div><h1 id="pageTitle">داشبورد</h1><p id="pageSubtitle">نمای کلی پرونده‌های بستری مجدد زیر ۴۸ ساعت</p></div>
+        <div class="top-actions"><span id="saveState">ذخیره خودکار فعال است</span><button class="btn secondary" id="quickImport">ورود Excel</button></div>
+      </header>
+
+      <section class="view active" id="view-dashboard">
+        <div class="filter-bar">
+          <label>ماه <select id="dashMonth"><option value="all">همه ماه‌ها</option></select></label>
+          <label>بخش ترخیص‌کننده <select id="dashDept"><option value="all">همه بخش‌ها</option></select></label>
+          <button class="btn ghost" id="resetDashFilters">پاک کردن فیلتر</button>
+        </div>
+        <div class="kpi-grid" id="kpiGrid"></div>
+        <div class="dashboard-grid">
+          <article class="panel span-2"><div class="panel-head"><div><h2>وضعیت بررسی پرونده‌ها</h2><p>موارد شناسایی‌شده در فایل‌های واردشده</p></div></div><div class="progress-section" id="reviewProgress"></div></article>
+          <article class="panel"><div class="panel-head"><div><h2>نوع ترخیص قبلی</h2><p>بر اساس پرونده‌های تکمیل‌شده</p></div></div><div id="dischargeChart" class="donut-wrap"></div></article>
+          <article class="panel span-2"><div class="panel-head"><div><h2>مقایسه بخش‌های ترخیص‌کننده</h2><p>تعداد موارد واجد شرایط بررسی</p></div></div><div id="departmentBars" class="bar-chart"></div></article>
+          <article class="panel attention"><div class="panel-head"><div><h2>نیازمند اقدام</h2><p>موارد ناقص یا بررسی‌نشده</p></div></div><div id="attentionList"></div></article>
+        </div>
+      </section>
+
+      <section class="view" id="view-import">
+        <div class="step-strip"><span class="on">۱. انتخاب فایل HS</span><i></i><span>۲. کنترل مراجعات</span><i></i><span>۳. اتصال و ذخیره</span></div>
+        <article class="panel upload-panel">
+          <div class="upload-zone" id="dropZone">
+            <div class="upload-icon">⇧</div><h2>فایل خروجی سیستم آمار را وارد کنید</h2>
+            <p>فایل مراجعه مجدد HS با پسوند xlsx یا xls را بکشید و اینجا رها کنید یا از روی دستگاه انتخاب کنید.</p>
+            <input type="file" id="fileInput" accept=".xlsx,.xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden />
+            <button class="btn primary" id="chooseFile">انتخاب فایل Excel</button>
+            <span class="sample-link">عنوان ستون‌های HS به‌صورت خودکار شناسایی می‌شود.</span>
+          </div>
+          <div class="import-result hidden" id="importResult"></div>
+        </article>
+        <article class="panel"><div class="panel-head"><div><h2>ستون‌های شناسایی‌شده از HS</h2><p>عنوان گزارش می‌تواند در ردیف اول و عنوان ستون‌ها در ردیف دوم باشد.</p></div></div><div class="required-cols" id="requiredColumns"></div></article>
+        <article class="panel"><div class="panel-head"><div><h2>سوابق ورود فایل</h2><p>شماره مراجعه از ثبت دوباره اطلاعات جلوگیری می‌کند.</p></div></div><div class="table-wrap"><table><thead><tr><th>نام فایل</th><th>زمان ورود</th><th>ردیف‌های فایل</th><th>موارد بررسی</th><th>وضعیت</th></tr></thead><tbody id="importHistory"></tbody></table></div></article>
+      </section>
+
+      <section class="view" id="view-cases">
+        <div class="filter-bar case-filters">
+          <label class="search-label">جستجو <input id="caseSearch" placeholder="نام بیمار یا کد ملی" /></label>
+          <label>وضعیت <select id="caseStatus"><option value="all">همه</option><option value="pending">بررسی نشده</option><option value="in_progress">در حال بررسی</option><option value="completed">تکمیل شده</option><option value="needs_doctor">نیازمند بررسی پزشک</option><option value="needs_time">نیازمند ساعت ترخیص</option><option value="incomplete">اطلاعات ناقص</option></select></label>
+          <label>بخش <select id="caseDept"><option value="all">همه بخش‌ها</option></select></label>
+          <label class="check"><input type="checkbox" id="onlyUnder48" checked /> فقط زیر ۴۸ ساعت</label>
+        </div>
+        <div class="case-layout">
+          <article class="panel case-list-panel"><div class="case-list-head"><h2>فهرست پرونده‌ها</h2><span id="caseCount"></span></div><div id="caseList" class="case-list"></div></article>
+          <article class="panel review-panel" id="reviewPanel"><div class="empty-state"><div>☷</div><h2>یک پرونده را انتخاب کنید</h2><p>اطلاعات پرونده و فرم بررسی در این قسمت نمایش داده می‌شود.</p></div></article>
+        </div>
+      </section>
+
+      <section class="view" id="view-reports">
+        <div class="report-actions"><div><h2>گزارش بررسی پرونده‌ها</h2><p>اطلاعات ثبت‌شده برای هر پرونده</p></div><div><button class="btn secondary" id="exportBackup">پشتیبان JSON</button><button class="btn primary" id="exportExcel">خروجی Excel کامل</button></div></div>
+        <div class="kpi-grid compact" id="reportKpis"></div>
+        <article class="panel"><div class="filter-bar embedded"><label>وضعیت <select id="reportStatus"><option value="all">همه وضعیت‌ها</option><option value="completed">تکمیل‌شده</option><option value="pending">بررسی‌نشده</option><option value="incomplete">ناقص</option></select></label><label>ارتباط دو بستری <select id="reportRelation"><option value="all">همه</option></select></label></div><div class="table-wrap full-report-table"><table><thead><tr id="reportHead"></tr></thead><tbody id="reportTable"></tbody></table></div></article>
+      </section>
+
+      <section class="view analytics-view" id="view-analytics">
+        <div class="report-actions print-head"><div><h2>گزارش تحلیلی بستری مجدد</h2><p>نمودارهای موردنظر را انتخاب کنید؛ همان انتخاب‌ها برای چاپ و پاورپوینت استفاده می‌شوند.</p></div><div class="analytics-actions"><button class="btn secondary" id="exportPptx">دریافت پاورپوینت انتخابی</button><button class="btn primary" id="printAnalytics">چاپ نمودارهای انتخابی</button></div></div>
+        <div class="analytics-tabs" role="tablist"><button class="analytics-tab active" data-analytics-tab="overview">آمار کل</button><button class="analytics-tab" data-analytics-tab="charts">گزارشات تحلیلی</button><button class="analytics-tab" data-analytics-tab="tables">جداول</button></div>
+        <section class="analytics-section active" data-analytics-section="overview"><div class="kpi-grid compact analytics-overview-kpis" id="analyticsOverviewKpis"></div><article class="panel"><div class="panel-head"><div><h2>خلاصه کل اطلاعات</h2><p>این قسمت بدون فیلتر، کل اطلاعات موجود را نشان می‌دهد.</p></div></div><div class="table-wrap"><table><thead><tr><th>تعداد مراجعه</th><th>تعداد پرونده</th><th>بستری مجدد زیر ۴۸ ساعت</th><th>ترخیص</th><th>فوت</th><th>انتقال</th></tr></thead><tbody id="analyticsOverallTable"></tbody></table></div></article></section>
+        <div class="filter-bar analytics-filters hidden"><label>سال <select id="analyticsYear"><option value="all">همه سال‌ها</option></select></label><label>ماه <select id="analyticsMonth"><option value="all">همه ماه‌ها</option></select></label><label>بخش پذیرش جدید <select id="analyticsAdmissionDept"><option value="all">همه بخش‌ها</option></select></label><label>وضعیت ۴۸ ساعت <select id="analytics48"><option value="all">همه موارد</option><option value="under">زیر ۴۸ ساعت</option><option value="over">بیشتر از ۴۸ ساعت</option><option value="needs_time">نیازمند ساعت ترخیص</option></select></label><button class="btn ghost" id="resetAnalytics">پاک کردن فیلتر</button></div>
+        <section class="analytics-section" data-analytics-section="charts"><div class="analytics-grid">
+          <article class="panel chart-panel wide"><div class="panel-head"><div><h2>بررسی مجدد به تفکیک ماه</h2><p>تعداد پرونده‌های موجود در گزارش</p></div><label class="chart-select"><input type="checkbox" checked> انتخاب برای خروجی</label></div><div class="chart-box" id="monthlyChart"></div></article>
+          <article class="panel chart-panel wide"><div class="panel-head"><div><h2>بخش‌های ترخیص‌کننده به تفکیک ماه</h2></div><label class="chart-select"><input type="checkbox" checked> انتخاب برای خروجی</label></div><div class="chart-box" id="dischargeDeptChart"></div></article>
+          <article class="panel chart-panel wide"><div class="panel-head"><div><h2>بخش‌های پذیرش‌کننده به تفکیک ماه</h2></div><label class="chart-select"><input type="checkbox" checked> انتخاب برای خروجی</label></div><div class="chart-box" id="admissionDeptChart"></div></article>
+          <article class="panel chart-panel"><div class="panel-head"><div><h2>مدت زمان بین دو پذیرش</h2></div><label class="chart-select"><input type="checkbox" checked> انتخاب برای خروجی</label></div><div class="chart-box" id="durationChart"></div></article>
+          <article class="panel chart-panel"><div class="panel-head"><div><h2>ارتباط پذیرش جدید با بستری قبلی</h2></div><label class="chart-select"><input type="checkbox" checked> انتخاب برای خروجی</label></div><div class="chart-box" id="relationChart"></div></article>
+          <article class="panel chart-panel"><div class="panel-head"><div><h2>نوع ترخیص</h2></div><label class="chart-select"><input type="checkbox" checked> انتخاب برای خروجی</label></div><div class="chart-box" id="dischargeTypeAnalytics"></div></article>
+          <article class="panel chart-panel"><div class="panel-head"><div><h2>نتیجه مراجعه</h2><p>فوت، ترخیص یا انتقال برای ادامه درمان</p></div><label class="chart-select"><input type="checkbox" checked> انتخاب برای خروجی</label></div><div class="chart-box" id="visitOutcomeChart"></div></article>
+          <article class="panel chart-panel wide"><div class="panel-head"><div><h2>تشخیص‌های پذیرش جدید</h2><p>ده تشخیص پرتکرار ثبت‌شده در سیستم HS</p></div><label class="chart-select"><input type="checkbox" checked> انتخاب برای خروجی</label></div><div class="chart-box diagnosis-chart-box" id="diagnosisChart"></div></article>
+          <article class="panel chart-panel wide"><div class="panel-head"><div><h2>نرخ مراجعات مرتبط به تفکیک بخش پذیرش</h2><p>درصد پرونده‌های مرتبط یا احتمالاً مرتبط از میان پرونده‌های بررسی‌شده هر بخش</p></div><label class="chart-select"><input type="checkbox" checked> انتخاب برای خروجی</label></div><div class="chart-box" id="managementRelationChart"></div></article>
+        </div>
+        </section>
+        <section class="analytics-section" data-analytics-section="tables"><div class="table-export-bar"><span>جدول‌ها و نمودار موردنظر را انتخاب کنید.</span><button class="btn secondary" id="exportTablesPptx">دریافت پاورپوینت جداول انتخابی</button></div><div class="analytics-tables">
+          <article class="panel table-export-panel"><div class="panel-head"><div><h2>خلاصه آماری فیلترشده</h2></div><label class="chart-select"><input type="checkbox" checked> انتخاب برای پاورپوینت</label></div><div class="table-wrap"><table id="analyticsSummaryTableElement"><thead><tr><th>تعداد مراجعه</th><th>تعداد پرونده</th><th>بستری مجدد زیر ۴۸ ساعت</th><th>ترخیص</th><th>فوت</th><th>انتقال</th></tr></thead><tbody id="analyticsSummaryTable"></tbody></table></div></article>
+          <article class="panel table-export-panel"><div class="panel-head"><div><h2>آمار ماهانه پرونده‌ها و نتایج مراجعه</h2></div><label class="chart-select"><input type="checkbox" checked> انتخاب برای پاورپوینت</label></div><div class="table-wrap"><table id="analyticsMonthlyTableElement"><thead><tr><th>سال</th><th>ماه</th><th>تاریخ‌های پذیرش</th><th>تعداد پرونده</th><th>تعداد بستری مجدد</th><th>تعداد فوت</th><th>تعداد ترخیص</th><th>تعداد انتقال</th></tr></thead><tbody id="analyticsMonthlyTable"></tbody></table></div></article>
+          <article class="panel table-chart-panel"><div class="panel-head"><div><h2>روند ماهانه پرونده‌ها و نتایج مراجعه</h2><p>نمایش همه شاخص‌های جدول به‌جز تاریخ‌های پذیرش</p></div><label class="chart-select"><input type="checkbox" checked> انتخاب برای پاورپوینت</label></div><div class="chart-box" id="monthlyResultsChart"></div></article>
+        </div></section>
+      </section>
+
+      <section class="view" id="view-base">
+        <div class="report-actions"><div><h2>اطلاعات پایه</h2><p>مقادیر این بخش در فهرست‌های کشویی فرم بررسی پرونده استفاده می‌شوند.</p></div></div>
+        <div class="base-grid" id="baseLists"></div>
+      </section>
+
+      <section class="view" id="view-settings">
+        <div class="settings-grid">
+          <article class="panel"><div class="panel-head"><div><h2>قاعده تشخیص</h2><p>مبنای قرارگرفتن پرونده در فهرست بررسی</p></div></div><div class="form-grid"><label>حد زمانی مراجعه مجدد (ساعت)<input id="thresholdHours" type="number" min="1" max="168" /></label><label class="check"><input type="checkbox" id="includeExact" /> مراجعه دقیقاً ۴۸ ساعت نیز محاسبه شود</label></div><button class="btn primary" id="saveSettings">ذخیره تنظیمات</button></article>
+          <article class="panel"><div class="panel-head"><div><h2>پشتیبان‌گیری و بازیابی</h2><p>برای انتقال اطلاعات به دستگاه دیگر</p></div></div><div class="stack-actions"><button class="btn secondary" id="downloadBackup">دریافت فایل پشتیبان</button><label class="btn secondary file-label">بازیابی از پشتیبان<input type="file" id="restoreBackup" accept=".json" hidden /></label></div></article>
+          <article class="panel"><div class="panel-head"><div><h2>پشتیبان‌گیری خودکار</h2><p>هر ۱۵ دقیقه یک نسخه در پوشه Backups کنار فایل‌های برنامه ذخیره می‌شود.</p></div></div><div class="backup-status" id="autoBackupStatus">در انتظار اولین پشتیبان‌گیری…</div></article>
+          <article class="panel danger-zone"><div class="panel-head"><div><h2>پاک‌کردن اطلاعات</h2><p>همه پرونده‌ها، بررسی‌ها و سوابق ورود فایل حذف می‌شوند.</p></div></div><button class="btn danger" id="clearData">حذف همه اطلاعات</button></article>
+        </div>
+      </section>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+  <div class="modal hidden" id="confirmModal"><div class="modal-card"><h2>حذف همه اطلاعات؟</h2><p>این عملیات قابل بازگشت نیست. ابتدا در صورت نیاز فایل پشتیبان دریافت کنید.</p><div><button class="btn secondary" id="cancelClear">انصراف</button><button class="btn danger" id="confirmClear">بله، حذف شود</button></div></div></div>
+  <script src="vendor/jszip.min.js"></script>
+  <script src="vendor/xlsx.full.min.js"></script>
+  <script src="vendor/pptxgen.bundle.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
